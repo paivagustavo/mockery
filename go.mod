@@ -1,4 +1,4 @@
-module github.com/vektra/mockery/v3
+module github.com/paivagustavo/mockery/v3
 
 go 1.23.7
 
