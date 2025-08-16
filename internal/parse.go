@@ -12,10 +12,10 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/paivagustavo/mockery/v3/config"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
+	"github.com/paivagustavo/mockery/v3/internal/stackerr"
 	"github.com/rs/zerolog"
-	"github.com/vektra/mockery/v3/config"
-	"github.com/vektra/mockery/v3/internal/logging"
-	"github.com/vektra/mockery/v3/internal/stackerr"
 	"golang.org/x/tools/go/packages"
 )
 

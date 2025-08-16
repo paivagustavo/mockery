@@ -7,9 +7,9 @@ import (
 	koanfYAML "github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/structs"
 	"github.com/knadh/koanf/v2"
+	"github.com/paivagustavo/mockery/v3/config"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
 	"github.com/spf13/cobra"
-	"github.com/vektra/mockery/v3/config"
-	"github.com/vektra/mockery/v3/internal/logging"
 )
 
 func NewShowConfigCmd() *cobra.Command {

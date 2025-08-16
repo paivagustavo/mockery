@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/paivagustavo/mockery/v3/config"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
 	"github.com/spf13/cobra"
-	"github.com/vektra/mockery/v3/config"
-	"github.com/vektra/mockery/v3/internal/logging"
 	"gopkg.in/yaml.v3"
 )
 

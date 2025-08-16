@@ -3,7 +3,7 @@ package internal
 import (
 	"go/ast"
 
-	"github.com/vektra/mockery/v3/config"
+	"github.com/paivagustavo/mockery/v3/config"
 	"golang.org/x/tools/go/packages"
 )
 

@@ -28,16 +28,16 @@ _anchors: &inpackage_config
   filename: "mock_{{.InterfaceNameSnake}}_test.go"
   inpackage: False
 packages:
-  github.com/vektra/mockery/v2/pkg/fixtures/buildtag/comment:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/buildtag/comment:
     config:
       mock-build-tags: "custom3 && (!windows || !darwin || !freebsd)"
       disable-version-string: true
     interfaces:
       IfaceWithCustomBuildTagInComment:
-  github.com/vektra/mockery/v2/pkg:
+  github.com/paivagustavo/mockery/v2/pkg:
     interfaces:
       TypesPackage:
-  github.com/vektra/mockery/v2/pkg/fixtures:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures:
     config:
       all: True
     interfaces:
@@ -67,14 +67,14 @@ packages:
       ReplaceGeneric:
         config:
           replace-type:
-            - github.com/vektra/mockery/v2/pkg/fixtures.ReplaceGeneric[-TImport]=github.com/vektra/mockery/v2/pkg/fixtures/redefined_type_b.B
-            - github.com/vektra/mockery/v2/pkg/fixtures.ReplaceGeneric[TConstraint]=github.com/vektra/mockery/v2/pkg/fixtures/constraints.String
+            - github.com/paivagustavo/mockery/v2/pkg/fixtures.ReplaceGeneric[-TImport]=github.com/paivagustavo/mockery/v2/pkg/fixtures/redefined_type_b.B
+            - github.com/paivagustavo/mockery/v2/pkg/fixtures.ReplaceGeneric[TConstraint]=github.com/paivagustavo/mockery/v2/pkg/fixtures/constraints.String
       # Replace a generic param with the parent type
       ReplaceGenericSelf:
         config:
           replace-type:
-            - github.com/vektra/mockery/v2/pkg/fixtures.ReplaceGenericSelf[-T]=github.com/vektra/mockery/v2/pkg/fixtures.*ReplaceGenericSelf
-  github.com/vektra/mockery/v2/pkg/fixtures/recursive_generation:
+            - github.com/paivagustavo/mockery/v2/pkg/fixtures.ReplaceGenericSelf[-T]=github.com/paivagustavo/mockery/v2/pkg/fixtures.*ReplaceGenericSelf
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/recursive_generation:
     config:
       recursive: True
       all: True
@@ -83,7 +83,7 @@ packages:
       mockname: "Mock{{.InterfaceName}}"
       outpkg: "{{.PackageName}}"
       inpackage: True
-  github.com/vektra/mockery/v2/pkg/fixtures/empty_return:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/empty_return:
     config:
       all: True
       dir: "{{.InterfaceDir}}"
@@ -92,7 +92,7 @@ packages:
       filename: "mock_{{.InterfaceName}}_test.go"
       inpackage: True
       keeptree: False
-  github.com/vektra/mockery/v2/pkg/fixtures/method_args/same_name_arg_and_type:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/method_args/same_name_arg_and_type:
     config:
       all: True
       dir: "{{.InterfaceDir}}"
@@ -101,15 +101,15 @@ packages:
       filename: "mock_{{.InterfaceName}}_test.go"
       inpackage: True
       keeptree: False
-  github.com/vektra/mockery/v2/pkg/fixtures/iface_typed_param:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/iface_typed_param:
     config: *inpackage_config
-  github.com/vektra/mockery/v2/pkg/fixtures/example_project:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/example_project:
     config: *inpackage_config
-  github.com/vektra/mockery/v2/pkg/fixtures/index_list_expr:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/index_list_expr:
     config: *inpackage_config
-  github.com/vektra/mockery/v2/pkg/fixtures/iface_new_type:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/iface_new_type:
     config: *inpackage_config
-  github.com/vektra/mockery/v2/pkg/fixtures/issue845:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/issue845:
     config:
       <<: *inpackage_config
       filename: "mock_{{.StructName}}_test.go"
@@ -120,7 +120,7 @@ packages:
             mockname: WithoutFix
           - issue-845-fix: True
             mockname: WithFix
-  github.com/vektra/mockery/v2/pkg/fixtures/type_alias:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/type_alias:
     config:
       all: True
       dir: "{{.InterfaceDir}}"
@@ -140,10 +140,10 @@ packages:
             mockname: Interface2WithUnresolvedAlias
           - resolve-type-alias: True
             mockname: Interface2WithResolvedAlias
-  github.com/vektra/mockery/v2/pkg/:
+  github.com/paivagustavo/mockery/v2/pkg/:
     interfaces:
       InterfaceDoesntExist:
-  github.com/vektra/mockery/v2/pkg/fixtures/auto_generated:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/auto_generated:
     config:
       all: True
       include-auto-generated: false
@@ -164,13 +164,13 @@ template: testify
 template-data:
   unroll-variadic: true
 packages:
-  github.com/vektra/mockery/v2/pkg:
+  github.com/paivagustavo/mockery/v2/pkg:
     interfaces:
       TypesPackage: {}
-  github.com/vektra/mockery/v2/pkg/:
+  github.com/paivagustavo/mockery/v2/pkg/:
     interfaces:
       InterfaceDoesntExist: {}
-  github.com/vektra/mockery/v2/pkg/fixtures:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures:
     config:
       all: true
     interfaces:
@@ -202,49 +202,49 @@ packages:
         config:
           template-data:
             unroll-variadic: false
-  github.com/vektra/mockery/v2/pkg/fixtures/auto_generated:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/auto_generated:
     config:
       all: true
       include-auto-generated: false
     interfaces:
       AutoGenerated: {}
-  github.com/vektra/mockery/v2/pkg/fixtures/buildtag/comment:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/buildtag/comment:
     config:
       template-data:
         mock-build-tags: custom3 && (!windows || !darwin || !freebsd)
     interfaces:
       IfaceWithCustomBuildTagInComment: {}
-  github.com/vektra/mockery/v2/pkg/fixtures/empty_return:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/empty_return:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: '{{.InterfaceName}}Mock'
       pkgname: '{{.PackageName}}'
-  github.com/vektra/mockery/v2/pkg/fixtures/example_project:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/example_project:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: Mock{{.InterfaceName}}
       pkgname: '{{.PackageName}}_test'
-  github.com/vektra/mockery/v2/pkg/fixtures/iface_new_type:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/iface_new_type:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: Mock{{.InterfaceName}}
       pkgname: '{{.PackageName}}_test'
-  github.com/vektra/mockery/v2/pkg/fixtures/iface_typed_param:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/iface_typed_param:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: Mock{{.InterfaceName}}
       pkgname: '{{.PackageName}}_test'
-  github.com/vektra/mockery/v2/pkg/fixtures/index_list_expr:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/index_list_expr:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: Mock{{.InterfaceName}}
       pkgname: '{{.PackageName}}_test'
-  github.com/vektra/mockery/v2/pkg/fixtures/issue845:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/issue845:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
@@ -255,20 +255,20 @@ packages:
         configs:
           - structname: WithoutFix
           - structname: WithFix
-  github.com/vektra/mockery/v2/pkg/fixtures/method_args/same_name_arg_and_type:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/method_args/same_name_arg_and_type:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: '{{.InterfaceName}}Mock'
       pkgname: '{{.PackageName}}'
-  github.com/vektra/mockery/v2/pkg/fixtures/recursive_generation:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/recursive_generation:
     config:
       all: true
       dir: '{{.InterfaceDir}}'
       structname: Mock{{.InterfaceName}}
       pkgname: '{{.PackageName}}'
       recursive: true
-  github.com/vektra/mockery/v2/pkg/fixtures/type_alias:
+  github.com/paivagustavo/mockery/v2/pkg/fixtures/type_alias:
     config:
       all: true
       dir: '{{.InterfaceDir}}'

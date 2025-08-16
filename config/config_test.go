@@ -61,7 +61,7 @@ func TestNewRootConfigUnknownEnvVar(t *testing.T) {
 	configFile := path.Join(t.TempDir(), "config.yaml")
 	require.NoError(t, os.WriteFile(configFile, []byte(`
 packages:
-  github.com/vektra/mockery/v3:
+  github.com/paivagustavo/mockery/v3:
 `), 0o600))
 
 	flags := pflag.NewFlagSet("test", pflag.ExitOnError)

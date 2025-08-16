@@ -9,11 +9,11 @@ import (
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
+	"github.com/paivagustavo/mockery/v3/config"
+	internalConfig "github.com/paivagustavo/mockery/v3/internal/config"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
 	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
-	"github.com/vektra/mockery/v3/config"
-	internalConfig "github.com/vektra/mockery/v3/internal/config"
-	"github.com/vektra/mockery/v3/internal/logging"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
@@ -318,7 +318,7 @@ func migrateConfig(
 	}
 	v3.ConfigFile = v2Config.Config
 	if v2Config.Cpuprofile != nil {
-		tbl.Append("deprecated-parameter", "`cpuprofile` is not supported in v3, however we welcome PRs to implement the feature: https://github.com/vektra/mockery/issues/956")
+		tbl.Append("deprecated-parameter", "`cpuprofile` is not supported in v3, however we welcome PRs to implement the feature: https://github.com/paivagustavo/mockery/issues/956")
 	}
 	v3.Dir = v2Config.Dir
 	if v2Config.DisableConfigSearch != nil {
@@ -382,7 +382,7 @@ func migrateConfig(
 		tbl.Append("deprecated-parameter", "`print` is not supported in v3.")
 	}
 	if v2Config.Profile != nil {
-		tbl.Append("deprecated-parameter", "`profile` is not supported in v3, but PRs are welcome to implement it: https://github.com/vektra/mockery/issues/955")
+		tbl.Append("deprecated-parameter", "`profile` is not supported in v3, but PRs are welcome to implement it: https://github.com/paivagustavo/mockery/issues/955")
 	}
 	if v2Config.Quiet != nil && *v2Config.Quiet == true {
 		tbl.Append("deprecated-parameter", "`quiet` is not supported in v3. Use `log-level` instead.")

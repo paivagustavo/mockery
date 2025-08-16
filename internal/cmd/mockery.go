@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/vektra/mockery/v3/config"
-	"github.com/vektra/mockery/v3/internal"
-	pkg "github.com/vektra/mockery/v3/internal"
-	"github.com/vektra/mockery/v3/internal/file"
-	"github.com/vektra/mockery/v3/internal/logging"
-	"github.com/vektra/mockery/v3/internal/stackerr"
+	"github.com/paivagustavo/mockery/v3/config"
+	"github.com/paivagustavo/mockery/v3/internal"
+	pkg "github.com/paivagustavo/mockery/v3/internal"
+	"github.com/paivagustavo/mockery/v3/internal/file"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
+	"github.com/paivagustavo/mockery/v3/internal/stackerr"
 
 	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"

@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/paivagustavo/mockery/v3/internal/logging"
 	"github.com/spf13/cobra"
-	"github.com/vektra/mockery/v3/internal/logging"
 )
 
 func NewVersionCmd() *cobra.Command {

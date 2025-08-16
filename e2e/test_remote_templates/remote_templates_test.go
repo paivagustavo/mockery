@@ -24,7 +24,7 @@ template-data:
   foo: foo
   bar: bar
 packages:
-  github.com/vektra/mockery/v3/internal/fixtures/template_exercise:
+  github.com/paivagustavo/mockery/v3/internal/fixtures/template_exercise:
     interfaces:
       Exercise:
 `
@@ -120,7 +120,7 @@ func TestRemoteTemplates(t *testing.T) {
 
 			//nolint: gosec
 			out, err := exec.Command(
-				"go", "run", "github.com/vektra/mockery/v3",
+				"go", "run", "github.com/paivagustavo/mockery/v3",
 				"--config", configFile).CombinedOutput()
 			if tt.expectMockeryErr {
 				assert.Error(t, err)

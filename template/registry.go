@@ -6,8 +6,8 @@ import (
 	"go/types"
 	"sort"
 
+	"github.com/paivagustavo/mockery/v3/internal/stackerr"
 	"github.com/rs/zerolog"
-	"github.com/vektra/mockery/v3/internal/stackerr"
 	"golang.org/x/tools/go/packages"
 )
 

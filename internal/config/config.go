@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/vektra/mockery/v3/internal/file"
+	"github.com/paivagustavo/mockery/v3/internal/file"
 )
 
 func FindConfig() (string, error) {

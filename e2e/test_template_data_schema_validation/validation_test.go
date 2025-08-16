@@ -16,7 +16,7 @@ func TestExercise(t *testing.T) {
 	defer os.Remove(outfile)
 
 	out, err := exec.Command(
-		"go", "run", "github.com/vektra/mockery/v3",
+		"go", "run", "github.com/paivagustavo/mockery/v3",
 		"--config", "./.mockery.yml").CombinedOutput()
 	assert.Error(t, err)
 	expectedString := "ERR (root): foo is required"

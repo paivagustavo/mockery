@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/vektra/mockery/tools/cmd"
+	"github.com/paivagustavo/mockery/tools/cmd"
 )
 
 func main() {

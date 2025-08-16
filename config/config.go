@@ -27,12 +27,12 @@ import (
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/providers/structs"
 	"github.com/knadh/koanf/v2"
+	internalConfig "github.com/paivagustavo/mockery/v3/internal/config"
+	"github.com/paivagustavo/mockery/v3/internal/logging"
+	"github.com/paivagustavo/mockery/v3/internal/stackerr"
+	"github.com/paivagustavo/mockery/v3/template_funcs"
 	"github.com/rs/zerolog"
 	"github.com/spf13/pflag"
-	internalConfig "github.com/vektra/mockery/v3/internal/config"
-	"github.com/vektra/mockery/v3/internal/logging"
-	"github.com/vektra/mockery/v3/internal/stackerr"
-	"github.com/vektra/mockery/v3/template_funcs"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -54,7 +54,7 @@ type TemplateData struct {
 	StructName string
 	// SrcPackageName is the name of the source package as defined by the `package [name]` in the source package.
 	SrcPackageName string
-	// SrcPackagePath is the fully qualified package path of the source package. e.g. "github.com/vektra/mockery/v3".
+	// SrcPackagePath is the fully qualified package path of the source package. e.g. "github.com/paivagustavo/mockery/v3".
 	SrcPackagePath string
 	// Template is the value of the `template` parameter.
 	Template string

@@ -8,7 +8,7 @@ import (
 	"io"
 	"text/template"
 
-	"github.com/vektra/mockery/v3/template_funcs"
+	"github.com/paivagustavo/mockery/v3/template_funcs"
 )
 
 // Template represents the template requested for rendering.
