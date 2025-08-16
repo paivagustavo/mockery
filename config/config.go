@@ -436,8 +436,14 @@ func (c PackageConfig) GetInterfaceConfig(ctx context.Context, interfaceName str
 	return ifaceConfig
 }
 
-func (c PackageConfig) ShouldGenerateInterface(ctx context.Context, interfaceName string) (bool, error) {
+func (c PackageConfig) ShouldGenerateInterface(ctx context.Context, interfaceName string, ifaceOverrides *InterfaceOverrides) (bool, error) {
 	log := zerolog.Ctx(ctx)
+
+	if ifaceOverrides.ShouldGenerate() {
+		log.Debug().Msg("interface has a `mockery_generate: true` comment")
+		return true, nil
+	}
+
 	if *c.Config.All {
 		if *c.Config.IncludeInterfaceRegex != "" {
 			log.Warn().Msg("interface config has both `all` and `include-interface-regex` set: `include-interface-regex` will be ignored")
@@ -516,6 +522,7 @@ type ReplaceType struct {
 
 type Config struct {
 	All                   *bool          `koanf:"all" yaml:"all,omitempty"`
+	Annotated             *bool          `koanf:"annotated" yaml:"annotated,omitempty"`
 	Anchors               map[string]any `koanf:"_anchors" yaml:"_anchors,omitempty"`
 	BuildTags             *string        `koanf:"build-tags" yaml:"build-tags,omitempty"`
 	ConfigFile            *string        `koanf:"config" yaml:"config,omitempty"`

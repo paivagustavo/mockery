@@ -268,7 +268,10 @@ func (r *RootApp) Run() error {
 		}
 		ifaceLog.Debug().Str("root-mock-name", *r.Config.Config.StructName).Str("pkg-mock-name", *pkgConfig.Config.StructName).Msg("mock-name during first GetPackageConfig")
 
-		shouldGenerate, err := pkgConfig.ShouldGenerateInterface(ifaceCtx, iface.Name)
+		// Extract interface overrides from the comment's in its declaration
+		ifaceOverrides := config.ExtractInterfaceOverrides(iface.GenDecl)
+
+		shouldGenerate, err := pkgConfig.ShouldGenerateInterface(ifaceCtx, iface.Name, ifaceOverrides)
 		if err != nil {
 			return err
 		}
@@ -281,6 +284,9 @@ func (r *RootApp) Run() error {
 		}
 		ifaceConfig := pkgConfig.GetInterfaceConfig(ctx, iface.Name)
 		for _, ifaceConfig := range ifaceConfig.Configs {
+			// apply annotations overrides.
+			ifaceOverrides.Override(ifaceConfig)
+
 			if err := ifaceConfig.ParseTemplates(ifaceCtx, iface.FilePath, iface.Name, iface.Pkg); err != nil {
 				log.Err(err).Msg("Can't parse config templates for interface")
 				return err
