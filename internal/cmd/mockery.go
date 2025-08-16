@@ -284,7 +284,7 @@ func (r *RootApp) Run() error {
 		}
 		ifaceConfig := pkgConfig.GetInterfaceConfig(ctx, iface.Name)
 		for _, ifaceConfig := range ifaceConfig.Configs {
-			// apply annotations overrides.
+			// overrides config with config defined in the interface's comments.
 			ifaceOverrides.Override(ifaceConfig)
 
 			if err := ifaceConfig.ParseTemplates(ifaceCtx, iface.FilePath, iface.Name, iface.Pkg); err != nil {
