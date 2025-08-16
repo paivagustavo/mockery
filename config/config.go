@@ -522,7 +522,6 @@ type ReplaceType struct {
 
 type Config struct {
 	All                   *bool          `koanf:"all" yaml:"all,omitempty"`
-	Annotated             *bool          `koanf:"annotated" yaml:"annotated,omitempty"`
 	Anchors               map[string]any `koanf:"_anchors" yaml:"_anchors,omitempty"`
 	BuildTags             *string        `koanf:"build-tags" yaml:"build-tags,omitempty"`
 	ConfigFile            *string        `koanf:"config" yaml:"config,omitempty"`
