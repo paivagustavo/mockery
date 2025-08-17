@@ -188,7 +188,6 @@ func (r *RootApp) Run() error {
 	}
 	log.Info().Str("config-file", r.Config.ConfigFileUsed()).Msgf("Starting mockery")
 	ctx := log.WithContext(context.Background())
-
 	buildTags := strings.Split(*r.Config.BuildTags, " ")
 
 	configuredPackages, err := r.Config.GetPackages(ctx)

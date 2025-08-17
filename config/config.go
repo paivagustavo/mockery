@@ -11,6 +11,8 @@ import (
 	"context"
 	"fmt"
 	"go/ast"
+	goparser "go/parser"
+	"go/token"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -32,6 +34,7 @@ import (
 	"github.com/paivagustavo/mockery/v3/internal/stackerr"
 	"github.com/paivagustavo/mockery/v3/template_funcs"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/pflag"
 	"golang.org/x/tools/go/packages"
 )
@@ -361,6 +364,31 @@ func (c *RootConfig) subPackages(pkgPath string) ([]string, error) {
 		paths := make([]string, 0, len(pkgs))
 		for _, pkg := range pkgs {
 			if len(pkg.GoFiles) == 0 {
+				continue
+			}
+
+			hasMockeryComment := false
+			for _, file := range pkg.GoFiles {
+				fset := token.NewFileSet()
+				f, err := goparser.ParseFile(fset, file, nil, goparser.ParseComments)
+				if err != nil {
+					log.Err(err).Msg("failed to parse file")
+					return nil
+				}
+
+				for _, c := range f.Comments {
+					hasMockeryComment = strings.Contains(c.Text(), "mockery_")
+					if hasMockeryComment {
+						break
+					}
+				}
+
+				if hasMockeryComment {
+					break
+				}
+			}
+
+			if !hasMockeryComment {
 				continue
 			}
 			paths = append(paths, pkg.PkgPath)

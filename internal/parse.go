@@ -53,14 +53,12 @@ func (p *Parser) ParsePackages(ctx context.Context, packageNames []string) ([]*I
 	log := zerolog.Ctx(ctx)
 	interfaces := []*Interface{}
 
-	log.Info().Str("package", strings.Join(packageNames, ",")).Msg("loading packages")
 	packages, err := packages.Load(&p.conf, packageNames...)
 	if err != nil {
 		return nil, err
 	}
 	for _, pkg := range packages {
 		pkgLog := log.With().Str("package", pkg.PkgPath).Logger()
-		pkgLog.Info().Msg("loading package")
 		pkgCtx := pkgLog.WithContext(ctx)
 		pkgConfig, err := p.mockeryConfig.GetPackageConfig(ctx, pkg.PkgPath)
 		if err != nil {
