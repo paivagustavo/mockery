@@ -11,8 +11,6 @@ import (
 	"context"
 	"fmt"
 	"go/ast"
-	goparser "go/parser"
-	"go/token"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -368,21 +366,13 @@ func (c *RootConfig) subPackages(pkgPath string) ([]string, error) {
 			}
 
 			hasMockeryComment := false
+			var err error
 			for _, file := range pkg.GoFiles {
-				fset := token.NewFileSet()
-				f, err := goparser.ParseFile(fset, file, nil, goparser.ParseComments)
+				hasMockeryComment, err = hasMockeryGenerate(file)
 				if err != nil {
-					log.Err(err).Msg("failed to parse file")
+					log.Err(err).Msg("failed to check for mockery comment")
 					return nil
 				}
-
-				for _, c := range f.Comments {
-					hasMockeryComment = strings.Contains(c.Text(), "mockery_")
-					if hasMockeryComment {
-						break
-					}
-				}
-
 				if hasMockeryComment {
 					break
 				}
@@ -397,6 +387,15 @@ func (c *RootConfig) subPackages(pkgPath string) ([]string, error) {
 	}
 
 	return convertPkgPath(pkgs), nil
+}
+
+func hasMockeryGenerate(pathName string) (bool, error) {
+	file, err := os.ReadFile(pathName)
+	if err != nil {
+		return false, stackerr.NewStackErr(err)
+	}
+
+	return bytes.Contains(file, []byte("mockery_generate")), nil
 }
 
 func (c *RootConfig) GetPackageConfig(ctx context.Context, pkgPath string) (*PackageConfig, error) {
