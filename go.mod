@@ -1,6 +1,6 @@
 module github.com/paivagustavo/mockery/v3
 
-go 1.23.7
+go 1.25.1
 
 require (
 	github.com/brunoga/deep v1.2.4
