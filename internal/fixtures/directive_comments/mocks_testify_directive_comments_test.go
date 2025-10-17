@@ -3,7 +3,7 @@
 // template: testify
 // TEST MOCKERY BOILERPLATE
 
-package interface_annotations
+package directive_comments
 
 import (
 	"net/http"

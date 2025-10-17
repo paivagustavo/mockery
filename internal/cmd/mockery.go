@@ -269,9 +269,12 @@ func (r *RootApp) Run() error {
 		ifaceLog.Debug().Str("root-mock-name", *r.Config.Config.StructName).Str("pkg-mock-name", *pkgConfig.Config.StructName).Msg("mock-name during first GetPackageConfig")
 
 		// Extract interface overrides from the comment's in its declaration
-		ifaceOverrides := config.ExtractInterfaceOverrides(iface.GenDecl)
+		directiveConfig, err := config.ExtractDirectiveConfig(ifaceCtx, iface.GenDecl)
+		if err != nil {
+			return fmt.Errorf("extracting directive config for interface %s: %w", iface.Name, err)
+		}
 
-		shouldGenerate, err := pkgConfig.ShouldGenerateInterface(ifaceCtx, iface.Name, ifaceOverrides)
+		shouldGenerate, err := pkgConfig.ShouldGenerateInterface(ifaceCtx, iface.Name, directiveConfig != nil)
 		if err != nil {
 			return err
 		}
@@ -282,11 +285,12 @@ func (r *RootApp) Run() error {
 		if pkgConfig.Interfaces == nil {
 			ifaceLog.Debug().Msg("interfaces is nil")
 		}
-		ifaceConfig := pkgConfig.GetInterfaceConfig(ctx, iface.Name)
-		for _, ifaceConfig := range ifaceConfig.Configs {
-			// overrides config with config defined in the interface's comments.
-			ifaceOverrides.Override(ifaceConfig)
+		ifaceConfig, err := pkgConfig.GetInterfaceConfig(ctx, iface.Name, directiveConfig)
+		if err != nil {
+			return fmt.Errorf("getting interface config for %s: %w", iface.Name, err)
+		}
 
+		for _, ifaceConfig := range ifaceConfig.Configs {
 			if err := ifaceConfig.ParseTemplates(ifaceCtx, iface.FilePath, iface.Name, iface.Pkg); err != nil {
 				log.Err(err).Msg("Can't parse config templates for interface")
 				return err

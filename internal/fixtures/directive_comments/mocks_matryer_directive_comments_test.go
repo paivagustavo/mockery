@@ -3,22 +3,22 @@
 // template: matryer
 // TEST MOCKERY BOILERPLATE
 
-package interface_annotations
+package directive_comments
 
 import (
 	"sync"
 )
 
-// Ensure that MockMatryerRequester does implement MatryerRequester.
+// Ensure that TheMatryerRequester does implement MatryerRequester.
 // If this is not the case, regenerate this file with mockery.
-var _ MatryerRequester = &MockMatryerRequester{}
+var _ MatryerRequester = &TheMatryerRequester{}
 
-// MockMatryerRequester is a mock implementation of MatryerRequester.
+// TheMatryerRequester is a mock implementation of MatryerRequester.
 //
 //	func TestSomethingThatUsesMatryerRequester(t *testing.T) {
 //
 //		// make and configure a mocked MatryerRequester
-//		mockedMatryerRequester := &MockMatryerRequester{
+//		mockedMatryerRequester := &TheMatryerRequester{
 //			GetFunc: func(path string) (string, error) {
 //				panic("mock out the Get method")
 //			},
@@ -28,7 +28,7 @@ var _ MatryerRequester = &MockMatryerRequester{}
 //		// and then make assertions.
 //
 //	}
-type MockMatryerRequester struct {
+type TheMatryerRequester struct {
 	// GetFunc mocks the Get method.
 	GetFunc func(path string) (string, error)
 
@@ -44,9 +44,9 @@ type MockMatryerRequester struct {
 }
 
 // Get calls GetFunc.
-func (mock *MockMatryerRequester) Get(path string) (string, error) {
+func (mock *TheMatryerRequester) Get(path string) (string, error) {
 	if mock.GetFunc == nil {
-		panic("MockMatryerRequester.GetFunc: method is nil but MatryerRequester.Get was just called")
+		panic("TheMatryerRequester.GetFunc: method is nil but MatryerRequester.Get was just called")
 	}
 	callInfo := struct {
 		Path string
@@ -63,7 +63,7 @@ func (mock *MockMatryerRequester) Get(path string) (string, error) {
 // Check the length with:
 //
 //	len(mockedMatryerRequester.GetCalls())
-func (mock *MockMatryerRequester) GetCalls() []struct {
+func (mock *TheMatryerRequester) GetCalls() []struct {
 	Path string
 } {
 	var calls []struct {

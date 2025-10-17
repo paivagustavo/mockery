@@ -127,4 +127,12 @@ packages:
               Foo:
                 pkg-path: github.com/vektra/mockery/v3/internal/fixtures/replace_type_pointers
                 type-name: Bar
-  github.com/vektra/mockery/v3/internal/fixtures/interface_annotations:
+  github.com/vektra/mockery/v3/internal/fixtures/directive_comments:
+    interfaces:
+      MatryerRequester:
+        config:
+          structname: TheMatryerRequester
+      ServerWithDifferentFile:
+        configs:
+          - structname: FunServerWithDifferentFile
+          - structname: AnotherFunServerWithDifferentFile

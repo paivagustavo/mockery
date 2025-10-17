@@ -34,6 +34,7 @@ import (
 	"github.com/vektra/mockery/v3/internal/stackerr"
 	"github.com/vektra/mockery/v3/template_funcs"
 	"golang.org/x/tools/go/packages"
+	"gopkg.in/yaml.v3"
 )
 
 // TemplateData is the data sent to the template for the config file.
@@ -418,29 +419,62 @@ func (c *PackageConfig) Initialize(ctx context.Context) error {
 	return nil
 }
 
-func (c PackageConfig) GetInterfaceConfig(ctx context.Context, interfaceName string) *InterfaceConfig {
-	log := zerolog.Ctx(ctx)
+func (c PackageConfig) GetInterfaceConfig(ctx context.Context, interfaceName string, directiveConfig *Config) (*InterfaceConfig, error) {
+	// If the interface has an explicit config, override it with the directive config.
+	// This favor any config set in the directive comment over the original file based config.
 	if ifaceConfig, ok := c.Interfaces[interfaceName]; ok {
-		return ifaceConfig
+		if directiveConfig != nil {
+			newConfig, err := deep.Copy(directiveConfig)
+			if err != nil {
+				return nil, fmt.Errorf("cloning directive config: %w", err)
+			}
+
+			// Merge the interface config into the directive config clone.
+			mergeConfigs(ctx, *ifaceConfig.Config, newConfig)
+
+			ifaceConfig.Config = newConfig
+
+			for i, subCfg := range ifaceConfig.Configs {
+				newConfig, err := deep.Copy(directiveConfig)
+				if err != nil {
+					return nil, fmt.Errorf("cloning directive config: %w", err)
+				}
+
+				// Merge the interface config into the directive config clone.
+				mergeConfigs(ctx, *subCfg, newConfig)
+				ifaceConfig.Configs[i] = newConfig
+			}
+		}
+
+		return ifaceConfig, nil
 	}
+
+	// We don't have a specific config for this interface,
+	// we should create a new one.
 	ifaceConfig := NewInterfaceConfig()
 
-	newConfig, err := deep.Copy(c.Config)
-	if err != nil {
-		log.Err(err).Msg("issue when deep-copying package config to interface config")
-		panic(err)
+	// If there is a directive config, use it as the base config.
+	if directiveConfig != nil {
+		newConfig, err := deep.Copy(directiveConfig)
+		if err != nil {
+			return nil, fmt.Errorf("cloning directive config: %w", err)
+		}
+		ifaceConfig.Config = newConfig
 	}
 
-	ifaceConfig.Config = newConfig
-	ifaceConfig.Configs = []*Config{newConfig}
-	return ifaceConfig
+	// Finally, merge the package config into the new config
+	mergeConfigs(ctx, *c.Config, ifaceConfig.Config)
+
+	ifaceConfig.Configs = []*Config{ifaceConfig.Config}
+	return ifaceConfig, nil
 }
 
-func (c PackageConfig) ShouldGenerateInterface(ctx context.Context, interfaceName string, ifaceOverrides *InterfaceOverrides) (bool, error) {
+func (c PackageConfig) ShouldGenerateInterface(ctx context.Context, interfaceName string, hasDirectiveComment bool) (bool, error) {
 	log := zerolog.Ctx(ctx)
 
-	if ifaceOverrides.ShouldGenerate() {
-		log.Debug().Msg("interface has a `mockery_generate: true` comment")
+	// If the interface has a directive comment, it should always be generated.
+	if hasDirectiveComment {
+		log.Debug().Msg("interface has a `mockery:` directive comment")
 		return true, nil
 	}
 
@@ -700,4 +734,42 @@ func (c *Config) GetReplacement(pkgPath string, typeName string) *ReplaceType {
 		return nil
 	}
 	return pkgMap[typeName]
+}
+
+// ExtractDirectiveConfig parses interface's documentation from a declaration
+// node and extracts mockery's directive configuration.
+//
+// Mockery directives are comments that start with "mockery:" and can appear
+// multiple times in the interface's doc comments. All such comments are combined
+// and interpreted as YAML configuration.
+func ExtractDirectiveConfig(ctx context.Context, decl *ast.GenDecl) (*Config, error) {
+	if decl == nil || decl.Doc == nil {
+		return nil, nil
+	}
+
+	var yamlConfig []string
+
+	// Extract all mockery directive comments and build a YAML document
+	for _, doc := range decl.Doc.List {
+		// Look for directive comments  `//mockery:<config-key>: <value>` and convert them to YAML
+		if value, found := strings.CutPrefix(doc.Text, "//mockery:"); found && value != "" {
+			yamlConfig = append(yamlConfig, value)
+		}
+	}
+
+	if len(yamlConfig) == 0 {
+		return nil, nil
+	}
+
+	// Combine all YAML lines into a single document
+	yamlDoc := strings.Join(yamlConfig, "\n")
+
+	// Parse the YAML directly into the directiveConfig struct
+	directiveConfig := Config{}
+	if err := yaml.Unmarshal([]byte(yamlDoc), &directiveConfig); err != nil {
+		fmt.Println(yamlDoc)
+		return nil, fmt.Errorf("invalid mockery's directive, make sure that it is a valid yaml: %w", err)
+	}
+
+	return &directiveConfig, nil
 }

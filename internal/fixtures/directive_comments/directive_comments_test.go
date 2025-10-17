@@ -1,4 +1,4 @@
-package interface_annotations
+package directive_comments
 
 import (
 	"os"
@@ -9,9 +9,9 @@ import (
 )
 
 func TestInterfaceAnnotations(t *testing.T) {
-	matryerMockBytes, err := os.ReadFile("mocks_matryer_interface_annotations_test.go")
+	matryerMockBytes, err := os.ReadFile("mocks_matryer_directive_comments_test.go")
 	require.NoError(t, err)
-	testifyMockBytes, err := os.ReadFile("mocks_testify_interface_annotations_test.go")
+	testifyMockBytes, err := os.ReadFile("mocks_testify_directive_comments_test.go")
 	require.NoError(t, err)
 	customFileBytes, err := os.ReadFile("server_with_different_file.go")
 	require.NoError(t, err)
@@ -28,16 +28,18 @@ func TestInterfaceAnnotations(t *testing.T) {
 	assert.NotContains(t, testifyMock, "type RequesterWithoutAnnotation struct")
 	assert.NotContains(t, customFile, "type RequesterWithoutAnnotation struct")
 
-	assert.Contains(t, matryerMock, "type MockMatryerRequester struct")
-	assert.NotContains(t, testifyMock, "type MockMatryerRequester struct")
-	assert.NotContains(t, customFile, "type MockMatryerRequester struct")
+	assert.Contains(t, matryerMock, "type TheMatryerRequester struct")
+	assert.NotContains(t, testifyMock, "type TheMatryerRequester struct")
+	assert.NotContains(t, customFile, "type TheMatryerRequester struct")
 
 	assert.NotContains(t, matryerMock, "type FunServer struct")
 	assert.Contains(t, testifyMock, "type FunServer struct")
 	assert.NotContains(t, customFile, "type FunServer struct")
 
-	assert.NotContains(t, matryerMock, "type MockServerWithDifferentFile struct")
-	assert.NotContains(t, testifyMock, "type MockServerWithDifferentFile struct")
-	assert.Contains(t, customFile, "type MockServerWithDifferentFile struct")
-
+	assert.NotContains(t, matryerMock, "type FunServerWithDifferentFile struct")
+	assert.NotContains(t, testifyMock, "type FunServerWithDifferentFile struct")
+	assert.Contains(t, customFile, "type FunServerWithDifferentFile struct")
+	assert.NotContains(t, matryerMock, "type AnotherFunServerWithDifferentFile struct")
+	assert.NotContains(t, testifyMock, "type AnotherFunServerWithDifferentFile struct")
+	assert.Contains(t, customFile, "type AnotherFunServerWithDifferentFile struct")
 }

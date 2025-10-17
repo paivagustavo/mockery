@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"go/ast"
 	"os"
 	"path"
 	"testing"
@@ -70,4 +71,106 @@ packages:
 	require.NoError(t, flags.Parse([]string{"--config", configFile}))
 	_, _, err := NewRootConfig(context.Background(), flags)
 	assert.NoError(t, err)
+}
+
+func TestExtractConfigFromDirectiveComments(t *testing.T) {
+	configs := []struct {
+		name         string
+		commentLines []string
+		expected     *Config
+		expectError  bool
+	}{
+		{
+			name: "no directive comments",
+			commentLines: []string{
+				"// This is a regular comment.",
+				"// Another regular comment.",
+			},
+			expected:    nil,
+			expectError: false,
+		},
+		{
+			name: "regular comments are not directive comments",
+			commentLines: []string{
+				"// Directive comments *must* shouldn't have spaces after the slashes.",
+				"// mockery:structname: MyMock",
+			},
+			expected:    nil,
+			expectError: false,
+		},
+		{
+			name: "valid single-line directive comment",
+			commentLines: []string{
+				"//mockery:structname: MyMock",
+			},
+			expected: &Config{
+				StructName: ptr("MyMock"),
+			},
+		},
+		{
+			name: "valid multi-line directive comments",
+			commentLines: []string{
+				"// Some initial comment.",
+				"//mockery:structname: MyMock",
+				"//mockery:filename: my_mock.go",
+				"// Some trailing comment.",
+			},
+			expected: &Config{
+				StructName: ptr("MyMock"),
+				FileName:   ptr("my_mock.go"),
+			},
+			expectError: false,
+		},
+		{
+			name: "invalid directive comment format",
+			commentLines: []string{
+				"//mockery:structname MyMock", // Missing ':'
+			},
+			expected:    nil,
+			expectError: true,
+		},
+		{
+			name: "unsupported configuration key are ignored",
+			commentLines: []string{
+				"//mockery:unknown_key: value",
+			},
+			expected:    &Config{},
+			expectError: false,
+		},
+		{
+			name: "mixed valid and invalid directive comments",
+			commentLines: []string{
+				"//mockery:structname: MyMock",
+				"//mockery:invalid_format", // Invalid
+				"//mockery:filename: my_mock.go",
+			},
+			expected:    nil,
+			expectError: true,
+		},
+	}
+
+	for _, tt := range configs {
+		t.Run(tt.name, func(t *testing.T) {
+			comments := make([]*ast.Comment, len(tt.commentLines))
+			for i, line := range tt.commentLines {
+				comments[i] = &ast.Comment{Text: line}
+			}
+
+			result, err := ExtractDirectiveConfig(context.Background(), &ast.GenDecl{
+				Doc: &ast.CommentGroup{
+					List: comments,
+				},
+			})
+			if tt.expectError {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, tt.expected, result)
+			}
+		})
+	}
+}
+
+func ptr[T any](s T) *T {
+	return &s
 }
