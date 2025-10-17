@@ -268,7 +268,7 @@ func (r *RootApp) Run() error {
 		}
 		ifaceLog.Debug().Str("root-mock-name", *r.Config.Config.StructName).Str("pkg-mock-name", *pkgConfig.Config.StructName).Msg("mock-name during first GetPackageConfig")
 
-		// Extract interface overrides from the comment's in its declaration
+		// Extract configuration from directive comments in the interface documentation
 		directiveConfig, err := config.ExtractDirectiveConfig(ifaceCtx, iface.GenDecl)
 		if err != nil {
 			return fmt.Errorf("extracting directive config for interface %s: %w", iface.Name, err)
